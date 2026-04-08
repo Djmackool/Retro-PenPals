@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SnailMail Pen Pals</title>
+  <style>
+    :root{
+      --bg:#f4ede4;
+      --paper:#fffaf3;
+      --ink:#2f241e;
+      --muted:#7c6758;
+      --accent:#9a5b3f;
+      --accent-soft:#c89c7c;
+      --line:#e4d2c1;
+      --shadow:0 12px 30px rgba(59,45,38,.10);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      background:linear-gradient(180deg,#efe4d8 0%, var(--bg) 100%);
+      color:var(--ink);
+    }
+    .wrap{max-width:1220px;margin:0 auto;padding:24px}
+    .topbar{
+      display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:18px
+    }
+    .brand{font-size:25px;font-weight:800}
+    .subbrand{font-size:14px;color:var(--muted)}
+    .hero{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:22px;
+      margin-bottom:22px;
+    }
+    .card{
+      background:var(--paper);
+      border:1px solid var(--line);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+    }
+    .hero-main{
+      position:relative;
+      overflow:hidden;
+      padding:34px 30px 30px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.6), rgba(255,255,255,.2)),
+        var(--paper);
+    }
+    .hero-main:before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        linear-gradient(90deg, transparent 0 27px, rgba(201,74,55,.16) 27px 29px, transparent 29px),
+        repeating-linear-gradient(
+          180deg,
+          transparent 0 34px,
+          rgba(210,194,180,.45) 34px 35px
+        );
+      opacity:.55;
+      pointer-events:none;
+    }
+    .hero-inner{
+      position:relative;
+      z-index:2;
+      max-width:720px;
+    }
+    h1{
+      margin:0 0 12px;
+      font-size:46px;
+      line-height:1;
+      letter-spacing:-1px;
+    }
+    .lead{
+      font-size:18px;
+      line-height:1.55;
+      margin-bottom:18px;
+    }
+    .chips{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0 0}
+    .chip{
+      padding:10px 14px;
+      border-radius:999px;
+      background:rgba(255,255,255,.85);
+      border:1px solid var(--line);
+      font-size:14px;
+    }
+    .button-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+    button{
+      border:none;background:var(--accent);color:white;padding:12px 16px;
+      border-radius:14px;font-weight:700;cursor:pointer
+    }
+    button.secondary{
+      background:white;color:var(--ink);border:1px solid var(--line)
+    }
+
+    /* realistic but subtle postal mark */
+    .postmark{
+      position:absolute;
+      right:28px;
+      top:24px;
+      width:210px;
+      height:210px;
+      pointer-events:none;
+      opacity:.35;
+      z-index:1;
+      transform:rotate(-12deg);
+    }
+    .postmark .ring1,
+    .postmark .ring2{
+      position:absolute;
+      border:3px solid rgba(154,91,63,.42);
+      border-radius:50%;
+      inset:18px;
+    }
+    .postmark .ring2{
+      inset:36px;
+      border-width:2px;
+    }
+    .postmark .text{
+      position:absolute;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      font-weight:800;
+      letter-spacing:2px;
+      color:rgba(154,91,63,.68);
+      font-size:15px;
+      line-height:1.15;
+    }
+    .postmark .lines{
+      position:absolute;
+      left:122px;
+      top:92px;
+      width:120px;
+      height:54px;
+    }
+    .postmark .lines span{
+      display:block;
+      height:9px;
+      margin-bottom:9px;
+      border-top:3px solid rgba(154,91,63,.42);
+      border-radius:50%;
+      transform:skewX(-18deg);
+    }
+
+    .hero-side{
+      padding:24px;
+      display:grid;
+      gap:14px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.55), rgba(255,255,255,.15)),
+        repeating-linear-gradient(
+          180deg,
+          #fffaf3 0px,
+          #fffaf3 31px,
+          #f1e2d4 32px,
+          #fffaf3 33px
+        );
+    }
+    .letter{
+      background:rgba(255,255,255,.85);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:16px;
+      line-height:1.5;
+    }
+    .mini{
+      font-size:12px;text-transform:uppercase;letter-spacing:1.2px;
+      color:var(--muted);font-weight:700;margin-bottom:6px
+    }
+
+    .layout{
+      display:grid;
+      grid-template-columns:360px 1fr;
+      gap:22px;
+    }
+    .panel{padding:22px}
+    h2{margin:0 0 8px}
+    label{
+      display:block;font-size:13px;font-weight:700;color:#6b584b;
+      margin:14px 0 6px
+    }
+    input, select, textarea{
+      width:100%;
+      padding:12px 13px;
+      border:1px solid var(--line);
+      border-radius:12px;
+      background:white;
+      color:var(--ink);
+      font:inherit;
+    }
+    textarea{min-height:88px;resize:vertical}
+    .hint{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.4}
+    .searchbar{
+      display:grid;
+      grid-template-columns:1fr 210px auto;
+      gap:12px;
+      margin:14px 0 18px
+    }
+    .results{display:grid;gap:16px}
+    .match{
+      background:white;
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:18px;
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:16px;
+    }
+    .match h3{margin:0 0 4px;font-size:22px}
+    .meta,.tags{display:flex;flex-wrap:wrap;gap:8px}
+    .meta{margin:10px 0 12px}
+    .tag{
+      font-size:12px;
+      padding:7px 10px;
+      border-radius:999px;
+      background:#f7ede4;
+      border:1px solid var(--line)
+    }
+    .section-title{font-size:14px;font-weight:700;margin:12px 0 6px}
+    .score{
+      min-width:84px;
+      text-align:center;
+      padding:12px;
+      border-radius:16px;
+      background:#fcf3ea;
+      border:1px solid var(--line);
+      font-weight:700;
+      height:max-content;
+    }
+    .empty{
+      background:white;border:1px dashed var(--line);border-radius:18px;
+      padding:22px;color:#766258
+    }
+    .footer-note{font-size:13px;color:#735f54;line-height:1.5;margin-top:14px}
+    @media (max-width: 940px){
+      .hero,.layout,.searchbar{grid-template-columns:1fr}
+      h1{font-size:38px}
+      .match{grid-template-columns:1fr}
+      .score{justify-self:start}
+      .postmark{
+        right:10px;
+        top:18px;
+        width:160px;
+        height:160px;
+        opacity:.24;
+      }
+      .postmark .lines{left:96px;top:69px;width:84px}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div>
+        <div class="brand">SnailMail Pen Pals</div>
+        <div class="subbrand">Search letter-writing pen pals by state or shared interests.</div>
+      </div>
+      <button class="secondary" onclick="resetAll()">Reset demo</button>
+    </div>
+
+    <section class="hero">
+      <div class="card hero-main">
+        <div class="postmark" aria-hidden="true">
+          <div class="ring1"></div>
+          <div class="ring2"></div>
+          <div class="text">POSTMARKED<br>FRIENDSHIP</div>
+          <div class="lines"><span></span><span></span><span></span></div>
+        </div>
+        <div class="hero-inner">
+          <h1>Find people who love real mail.</h1>
+          <div class="lead">
+            Create a snail mail profile with your <strong>interests</strong>, <strong>dislikes</strong>,
+            letter-writing style, and location. Then search pen pals by <strong>state</strong> or
+            <strong>common interests</strong>.
+          </div>
+          <div class="chips">
+            <div class="chip">✉️ Interests + dislikes on profile</div>
+            <div class="chip">📍 Search by state</div>
+            <div class="chip">🖋️ Search by common hobbies</div>
+            <div class="chip">🛡️ Safer address sharing later</div>
+          </div>
+          <div class="button-row">
+            <button onclick="scrollToProfile()">Create profile</button>
+            <button class="secondary" onclick="loadSample()">Load sample</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card hero-side">
+        <div class="letter">
+          <div class="mini">Profiles now include</div>
+          Favorite hobbies, topics you enjoy writing about, dislikes or hard no's, and your preferred pace of mail.
+        </div>
+        <div class="letter">
+          <div class="mini">Search options</div>
+          Search by a state like <strong>Georgia</strong>, or by interests like <strong>horror movies</strong>, <strong>journaling</strong>, or <strong>postcards</strong>.
+        </div>
+        <div class="letter">
+          <div class="mini">Safety</div>
+          Match first. Share a PO box or safe mailing address only when you're comfortable.
+        </div>
+      </div>
+    </section>
+
+    <section class="layout">
+      <div class="card panel" id="profileCard">
+        <div class="mini">Your profile</div>
+        <h2>Letter-writing profile</h2>
+
+        <label for="name">Display name</label>
+        <input id="name" placeholder="Amanda" />
+
+        <label for="state">State</label>
+        <input id="state" placeholder="Georgia" />
+
+        <label for="city">City or general area</label>
+        <input id="city" placeholder="McDonough area" />
+        <div class="hint">Keep it broad for privacy.</div>
+
+        <label for="mailType">Mail style</label>
+        <select id="mailType">
+          <option value="">Choose one</option>
+          <option>Long handwritten letters</option>
+          <option>Short notes & postcards</option>
+          <option>Mix of both</option>
+        </select>
+
+        <label for="frequency">Write frequency</label>
+        <select id="frequency">
+          <option value="">Choose one</option>
+          <option>Weekly</option>
+          <option>Twice a month</option>
+          <option>Monthly</option>
+          <option>Flexible / slower pace</option>
+        </select>
+
+        <label for="interests">Interests</label>
+        <input id="interests" placeholder="tattoos, horror movies, journaling, spooky stationery" />
+        <div class="hint">Separate with commas.</div>
+
+        <label for="dislikes">Dislikes / do not want to write about</label>
+        <input id="dislikes" placeholder="sports, politics, rude humor" />
+
+        <label for="bio">About you</label>
+        <textarea id="bio" placeholder="I like meaningful letters, moody stationery, and genuine conversation."></textarea>
+
+        <div class="button-row">
+          <button onclick="saveProfile()">Save profile</button>
+          <button class="secondary" onclick="runSearch()">Show matches</button>
+        </div>
+
+        <div class="footer-note">Demo only. Your profile is stored locally in this browser.</div>
+      </div>
+
+      <div>
+        <div class="card panel">
+          <div class="mini">Search pen pals</div>
+          <h2>Find by state or common interests</h2>
+
+          <div class="searchbar">
+            <input id="interestSearch" placeholder="Search interest, like horror movies or journaling" />
+            <input id="stateSearch" placeholder="Search state, like Georgia" />
+            <button onclick="runSearch()">Search</button>
+          </div>
+
+          <div id="results" class="results"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const sampleProfiles = [
+      {
+        name: "Hazel",
+        state: "North Carolina",
+        city: "Charlotte area",
+        mailType: "Long handwritten letters",
+        frequency: "Twice a month",
+        interests: ["goth novels","tea","wax seals","cemetery photography","horror movies"],
+        dislikes: ["sports talk","mean gossip"],
+        bio: "Loves thoughtful letters, dark florals, and stationery with personality."
+      },
+      {
+        name: "Mina",
+        state: "Georgia",
+        city: "Athens area",
+        mailType: "Mix of both",
+        frequency: "Monthly",
+        interests: ["journaling","postcards","scrapbooking","tattoos","music playlists"],
+        dislikes: ["political debates","fast replies pressure"],
+        bio: "Enjoys decorating envelopes, swapping little extras, and slow genuine friendship."
+      },
+      {
+        name: "June",
+        state: "Oregon",
+        city: "Portland area",
+        mailType: "Short notes & postcards",
+        frequency: "Flexible / slower pace",
+        interests: ["fountain pens","nature sketches","bookstores","gardening","postcards"],
+        dislikes: ["arguments","crowded social scenes"],
+        bio: "Perfect for low-pressure postcard swaps and pretty mail."
+      },
+      {
+        name: "Raven",
+        state: "Georgia",
+        city: "Savannah area",
+        mailType: "Long handwritten letters",
+        frequency: "Twice a month",
+        interests: ["horror movies","vintage paper","tattoos","true crime","reading"],
+        dislikes: ["small talk only","judgmental people"],
+        bio: "Likes long spooky letters, book talk, and interesting life stories."
+      },
+      {
+        name: "Elena",
+        state: "Florida",
+        city: "Tampa area",
+        mailType: "Mix of both",
+        frequency: "Weekly",
+        interests: ["journaling","stickers","tea","thrifting","postcards"],
+        dislikes: ["rudeness","heated arguments"],
+        bio: "Loves colorful mail, memory-keeping, and writing often."
+      }
+    ];
+
+    function normalizeList(text) {
+      return text.split(",").map(x => x.trim().toLowerCase()).filter(Boolean);
+    }
+
+    function scrollToProfile() {
+      document.getElementById("profileCard").scrollIntoView({behavior:"smooth"});
+    }
+
+    function loadSample() {
+      const sample = {
+        name: "Amanda",
+        state: "Georgia",
+        city: "McDonough area",
+        mailType: "Mix of both",
+        frequency: "Twice a month",
+        interests: "tattoos, horror movies, journaling, spooky stationery",
+        dislikes: "sports, politics, rude humor",
+        bio: "I like genuine friendships, handwritten mail, and creative envelopes with personality."
+      };
+      for (const [k,v] of Object.entries(sample)) {
+        const el = document.getElementById(k);
+        if (el) el.value = v;
+      }
+      saveProfile(false);
+      runSearch();
+    }
+
+    function saveProfile(showAlert=true) {
+      const profile = {
+        name: document.getElementById("name").value.trim(),
+        state: document.getElementById("state").value.trim(),
+        city: document.getElementById("city").value.trim(),
+        mailType: document.getElementById("mailType").value,
+        frequency: document.getElementById("frequency").value,
+        interests: document.getElementById("interests").value.trim(),
+        dislikes: document.getElementById("dislikes").value.trim(),
+        bio: document.getElementById("bio").value.trim()
+      };
+      localStorage.setItem("snailmail-profile-v4", JSON.stringify(profile));
+      if (showAlert) alert("Profile saved on this device.");
+    }
+
+    function loadSaved() {
+      const raw = localStorage.getItem("snailmail-profile-v4");
+      if (!raw) return;
+      const profile = JSON.parse(raw);
+      for (const [k,v] of Object.entries(profile)) {
+        const el = document.getElementById(k);
+        if (el) el.value = v;
+      }
+    }
+
+    function resetAll() {
+      localStorage.removeItem("snailmail-profile-v4");
+      ["name","state","city","mailType","frequency","interests","dislikes","bio","interestSearch","stateSearch"].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = "";
+      });
+      renderResults([]);
+    }
+
+    function scoreMatch(profile, person, interestQuery, stateQuery) {
+      let score = 70;
+      const myInterests = normalizeList(profile.interests || "");
+      const myDislikes = normalizeList(profile.dislikes || "");
+      const theirInterests = person.interests.map(x => x.toLowerCase());
+      const theirDislikes = person.dislikes.map(x => x.toLowerCase());
+
+      myInterests.forEach(item => {
+        if (theirInterests.some(t => t.includes(item) || item.includes(t))) score += 6;
+      });
+
+      myDislikes.forEach(item => {
+        if (theirInterests.some(t => t.includes(item) || item.includes(t))) score -= 8;
+      });
+
+      theirDislikes.forEach(item => {
+        if (myInterests.some(t => t.includes(item) || item.includes(t))) score -= 6;
+      });
+
+      if (profile.state && profile.state.toLowerCase() === person.state.toLowerCase()) score += 8;
+      if (profile.mailType && profile.mailType === person.mailType) score += 5;
+      if (profile.frequency && profile.frequency === person.frequency) score += 5;
+
+      if (interestQuery) {
+        const q = interestQuery.toLowerCase();
+        if (theirInterests.some(t => t.includes(q) || q.includes(t))) score += 12;
+        else score -= 8;
+      }
+
+      if (stateQuery) {
+        if (person.state.toLowerCase().includes(stateQuery.toLowerCase())) score += 12;
+        else score -= 10;
+      }
+
+      return Math.max(1, Math.min(99, score));
+    }
+
+    function runSearch() {
+      saveProfile(false);
+
+      const profileRaw = JSON.parse(localStorage.getItem("snailmail-profile-v4") || "{}");
+      const interestQuery = document.getElementById("interestSearch").value.trim();
+      const stateQuery = document.getElementById("stateSearch").value.trim();
+
+      let filtered = sampleProfiles.filter(person => {
+        const matchesState = !stateQuery || person.state.toLowerCase().includes(stateQuery.toLowerCase());
+        const matchesInterest = !interestQuery || person.interests.some(i => i.toLowerCase().includes(interestQuery.toLowerCase()));
+        return matchesState && matchesInterest;
+      });
+
+      filtered = filtered.map(person => ({
+        ...person,
+        score: scoreMatch(profileRaw, person, interestQuery, stateQuery)
+      })).sort((a,b) => b.score - a.score);
+
+      renderResults(filtered);
+    }
+
+    function renderResults(matches) {
+      const container = document.getElementById("results");
+      if (!matches.length) {
+        container.innerHTML = '<div class="empty">No profiles match that search yet. Try a different state or a broader interest like <strong>journaling</strong>, <strong>tattoos</strong>, or <strong>postcards</strong>.</div>';
+        return;
+      }
+
+      container.innerHTML = matches.map(person => `
+        <div class="match">
+          <div>
+            <h3>${person.name}</h3>
+            <div>${person.city}, ${person.state}</div>
+            <div class="meta">
+              <span class="tag">${person.mailType}</span>
+              <span class="tag">${person.frequency}</span>
+            </div>
+
+            <div class="section-title">Interests</div>
+            <div class="tags">${person.interests.map(i => `<span class="tag">${i}</span>`).join("")}</div>
+
+            <div class="section-title">Dislikes</div>
+            <div class="tags">${person.dislikes.map(i => `<span class="tag">${i}</span>`).join("")}</div>
+
+            <div class="section-title">About</div>
+            <div>${person.bio}</div>
+          </div>
+          <div class="score">${person.score}%<br><span style="font-size:12px;font-weight:400">match</span></div>
+        </div>
+      `).join("");
+    }
+
+    loadSaved();
+    renderResults(sampleProfiles.map(p => ({...p, score: 80})));
+  </script>
+</body>
+</html>
