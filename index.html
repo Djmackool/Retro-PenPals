@@ -5,110 +5,96 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SnailMail Pen Pals</title>
   <link rel="stylesheet" href="styles.css" />
+
+  <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js"></script>
 </head>
+
 <body>
-  <div class="wrap">
-    <header class="topbar">
-      <div>
-        <div class="brand">SnailMail Pen Pals</div>
-        <div class="subbrand">Live version with Supabase-ready profiles</div>
-      </div>
-      <button class="secondary" id="sampleBtnTop">Load sample</button>
-    </header>
+<div class="wrap">
 
-    <section class="hero card">
-      <div class="postmark" aria-hidden="true">
-        <div class="ring1"></div>
-        <div class="ring2"></div>
-        <div class="text">POSTMARKED<br>FRIENDSHIP</div>
-        <div class="lines"><span></span><span></span><span></span></div>
-      </div>
-
-      <div class="hero-inner">
-        <h1>Find people who love real mail.</h1>
-        <p class="lead">
-  Create a snail mail profile with your interests, dislikes, letter-writing style, and state. 
-  Search pen pals by common interests or location.
-</p>
-
-        <div class="chips">
-          <span class="chip">Live profile storage</span>
-          <span class="chip">Search by state</span>
-          <span class="chip">Search by common hobbies</span>
-          <span class="chip">No login required yet</span>
-        </div>
-      </div>
-    </section>
-
-    <section class="layout">
-      <aside class="card panel">
-        <div class="mini">Create profile</div>
-        <h2>Letter-writing profile</h2>
-
-        <label for="name">Display name</label>
-        <input id="name" placeholder="Amanda" />
-
-        <label for="state">State</label>
-        <input id="state" placeholder="Georgia" />
-
-        <label for="city">City or general area</label>
-        <input id="city" placeholder="McDonough area" />
-
-        <label for="mailType">Mail style</label>
-        <select id="mailType">
-          <option value="">Choose one</option>
-          <option>Long handwritten letters</option>
-          <option>Short notes & postcards</option>
-          <option>Mix of both</option>
-        </select>
-
-        <label for="frequency">Write frequency</label>
-        <select id="frequency">
-          <option value="">Choose one</option>
-          <option>Weekly</option>
-          <option>Twice a month</option>
-          <option>Monthly</option>
-          <option>Flexible / slower pace</option>
-        </select>
-
-        <label for="interests">Interests</label>
-        <input id="interests" placeholder="tattoos, horror movies, journaling, spooky stationery" />
-
-        <label for="dislikes">Dislikes / do not want to write about</label>
-        <input id="dislikes" placeholder="sports, politics, rude humor" />
-
-        <label for="bio">About you</label>
-        <textarea id="bio" placeholder="I like meaningful letters, moody stationery, and genuine conversation."></textarea>
-
-        <div class="button-row">
-          <button id="saveBtn">Save to live app</button>
-          <button class="secondary" id="sampleBtn">Load sample</button>
-        </div>
-
-        <div class="footnote" id="status">Connect Supabase in supabase-config.js before saving.</div>
-      </aside>
-
-      <main class="card panel">
-        <div class="mini">Search live profiles</div>
-        <h2>Find by state or common interests</h2>
-
-        <div class="searchbar">
-          <input id="interestSearch" placeholder="Search interest, like horror movies or journaling" />
-          <input id="stateSearch" placeholder="Search state, like Georgia" />
-          <button id="searchBtn">Search</button>
-        </div>
-
-        <div class="button-row" style="margin:0 0 18px">
-          <button class="secondary" id="refreshBtn">Refresh live profiles</button>
-        </div>
-
-        <div id="results" class="results"></div>
-      </main>
-    </section>
+<header class="topbar">
+  <div>
+    <div class="brand">SnailMail Pen Pals</div>
+    <div class="subbrand">Find pen pals around the world</div>
   </div>
 
-  <script src="app.js"></script>
+  <div class="button-row" style="margin:0">
+    <button class="secondary" id="signupBtnTop">Sign up</button>
+    <button class="secondary" id="loginBtnTop">Log in</button>
+  </div>
+</header>
+
+<section class="hero card">
+  <div class="hero-inner">
+    <h1>Find people who love real mail.</h1>
+
+    <p class="lead">
+      Create a snail mail profile with your interests, dislikes, letter-writing style, and state.
+      Search pen pals by common interests or location.
+    </p>
+  </div>
+</section>
+
+<section class="layout">
+
+<aside class="card panel">
+
+  <div class="mini">Create profile</div>
+  <h2>Letter-writing profile</h2>
+
+  <label>Email</label>
+  <input id="email" type="email" placeholder="you@email.com">
+
+  <label>Password</label>
+  <input id="password" type="password" placeholder="password">
+
+  <label>Display name</label>
+  <input id="name">
+
+  <label>State</label>
+  <input id="state">
+
+  <label>City</label>
+  <input id="city">
+
+  <label>Interests</label>
+  <input id="interests">
+
+  <label>Dislikes</label>
+  <input id="dislikes">
+
+  <label>About you</label>
+  <textarea id="bio"></textarea>
+
+  <div class="button-row">
+    <button id="saveBtn">Save Profile</button>
+    <button class="secondary" id="signupBtn">Sign up</button>
+    <button class="secondary" id="loginBtn">Log in</button>
+  </div>
+
+  <div id="status" class="footnote"></div>
+
+</aside>
+
+<main class="card panel">
+
+  <div class="mini">Search</div>
+  <h2>Find pen pals</h2>
+
+  <input id="interestSearch" placeholder="Search interest">
+  <input id="stateSearch" placeholder="Search state">
+
+  <button id="searchBtn">Search</button>
+
+  <div id="results"></div>
+
+</main>
+
+</section>
+</div>
+
+<script src="app.js"></script>
 </body>
 </html>
