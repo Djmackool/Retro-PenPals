@@ -1,0 +1,111 @@
+:root{
+  --bg:#f4ede4;
+  --paper:#fffaf3;
+  --ink:#2f241e;
+  --muted:#7c6758;
+  --accent:#9a5b3f;
+  --line:#e4d2c1;
+  --shadow:0 12px 30px rgba(59,45,38,.10);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial, Helvetica, sans-serif;
+  background:linear-gradient(180deg,#efe4d8 0%, var(--bg) 100%);
+  color:var(--ink);
+}
+.wrap{max-width:1220px;margin:0 auto;padding:24px}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:18px}
+.brand{font-size:25px;font-weight:800}
+.subbrand{font-size:14px;color:var(--muted)}
+.card{
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:24px;
+  box-shadow:var(--shadow);
+}
+.hero{
+  position:relative;
+  overflow:hidden;
+  padding:34px 30px 30px;
+  margin-bottom:22px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.6), rgba(255,255,255,.2)),
+    var(--paper);
+}
+.hero:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(90deg, transparent 0 27px, rgba(201,74,55,.16) 27px 29px, transparent 29px),
+    repeating-linear-gradient(180deg, transparent 0 34px, rgba(210,194,180,.45) 34px 35px);
+  opacity:.55;
+  pointer-events:none;
+}
+.hero-inner{position:relative;z-index:2;max-width:720px}
+h1{margin:0 0 12px;font-size:46px;line-height:1;letter-spacing:-1px}
+.lead{font-size:18px;line-height:1.55;margin-bottom:18px;max-width:760px}
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{
+  padding:10px 14px;border-radius:999px;background:rgba(255,255,255,.85);
+  border:1px solid var(--line);font-size:14px
+}
+.postmark{
+  position:absolute;right:28px;top:24px;width:210px;height:210px;pointer-events:none;
+  opacity:.35;z-index:1;transform:rotate(-12deg);
+}
+.postmark .ring1,.postmark .ring2{
+  position:absolute;border:3px solid rgba(154,91,63,.42);border-radius:50%;inset:18px;
+}
+.postmark .ring2{inset:36px;border-width:2px}
+.postmark .text{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;
+  font-weight:800;letter-spacing:2px;color:rgba(154,91,63,.68);font-size:15px;line-height:1.15;
+}
+.postmark .lines{position:absolute;left:122px;top:92px;width:120px;height:54px}
+.postmark .lines span{
+  display:block;height:9px;margin-bottom:9px;border-top:3px solid rgba(154,91,63,.42);
+  border-radius:50%;transform:skewX(-18deg);
+}
+.layout{display:grid;grid-template-columns:360px 1fr;gap:22px}
+.panel{padding:22px}
+.mini{font-size:12px;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);font-weight:700;margin-bottom:6px}
+h2{margin:0 0 8px}
+label{display:block;font-size:13px;font-weight:700;color:#6b584b;margin:14px 0 6px}
+input,select,textarea{
+  width:100%;padding:12px 13px;border:1px solid var(--line);border-radius:12px;background:white;color:var(--ink);font:inherit;
+}
+textarea{min-height:88px;resize:vertical}
+.button-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+button{
+  border:none;background:var(--accent);color:white;padding:12px 16px;border-radius:14px;font-weight:700;cursor:pointer;
+}
+button.secondary{background:white;color:var(--ink);border:1px solid var(--line)}
+.searchbar{display:grid;grid-template-columns:1fr 210px auto;gap:12px;margin:14px 0 18px}
+.results{display:grid;gap:16px}
+.match{
+  background:white;border:1px solid var(--line);border-radius:18px;padding:18px;
+  display:grid;grid-template-columns:1fr auto;gap:16px;
+}
+.match h3{margin:0 0 4px;font-size:22px}
+.meta,.tags{display:flex;flex-wrap:wrap;gap:8px}
+.meta{margin:10px 0 12px}
+.tag{font-size:12px;padding:7px 10px;border-radius:999px;background:#f7ede4;border:1px solid var(--line)}
+.section-title{font-size:14px;font-weight:700;margin:12px 0 6px}
+.score{
+  min-width:84px;text-align:center;padding:12px;border-radius:16px;background:#fcf3ea;
+  border:1px solid var(--line);font-weight:700;height:max-content;
+}
+.empty{
+  background:white;border:1px dashed var(--line);border-radius:18px;padding:22px;color:#766258
+}
+.footnote{margin-top:14px;color:#735f54;font-size:13px;line-height:1.5}
+@media (max-width: 940px){
+  .layout,.searchbar{grid-template-columns:1fr}
+  h1{font-size:38px}
+  .match{grid-template-columns:1fr}
+  .score{justify-self:start}
+  .postmark{right:10px;top:18px;width:160px;height:160px;opacity:.24}
+  .postmark .lines{left:96px;top:69px;width:84px}
+}
